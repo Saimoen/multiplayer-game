@@ -23,18 +23,20 @@ io.on('connection', (socket) => {
 
     // Send the updated players list to all clients
     io.emit('update-players', players);
-
-    console.log(players);
-
-    // Emit start-game when there are two players
+    
+    // Emit start-game event when there are two players
     if (players.length === 2) {
-        console.log('Two players connected, starting game...');
+        console.log('Two players connected, ready to start the game...');
         io.emit('start-game');
     }
 
+    // Handle start-game event from any player
     socket.on('start-game', () => {
-        socket.emit('launch-game')
-        console.log('start-game');
+        if (players.length === 2) {
+            io.emit('update-players', players);
+            io.emit('launch-game');
+            console.log('Game launched by player:', socket.id);
+        }
     });
 
     // Handle player movement
@@ -54,8 +56,6 @@ io.on('connection', (socket) => {
         io.emit('update-players', players);
     });
 });
-
-
 
 http.listen(3000, () => {
     console.log('listening on *:3000');

@@ -1,16 +1,15 @@
-import { GameObjects, Physics } from "phaser";
+import { Physics } from "phaser";
 import { Bullet } from "./Bullet";
 
 export class Player extends Physics.Arcade.Image {
     
-    // Player states: waiting, start, can_move
-    state = "waiting";
+    state = "waiting"; // Player states: waiting, start, can_move
     propulsion_fire = null;
     scene = null;
     bullets = null;
 
-    constructor({scene}) {
-        super(scene, -160, 100, "player");
+    constructor({scene, socketId}) {
+        super(scene, 100, 100, "player"); // Starting position
         this.scene = scene;
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
